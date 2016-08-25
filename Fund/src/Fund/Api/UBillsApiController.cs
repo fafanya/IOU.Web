@@ -36,6 +36,8 @@ namespace Fund.Api
                 b.Id = uBill.Id;
 
                 b.MemberName = _context.UMembers.FirstOrDefault(x => x.Id == b.UMemberId).Name;
+
+                result.Add(b);
             }
             return result;
         }

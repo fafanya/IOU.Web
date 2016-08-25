@@ -25,6 +25,8 @@ namespace Fund.Api
         public IEnumerable<UPayment> ByEvent([FromRoute] int id)
         {
             IEnumerable<UPayment> uPayments = _context.UPayments.Where(x => x.UEventId == id);
+
+            List<UPayment> result = new List<UPayment>();
             foreach (UPayment uPayment in uPayments)
             {
                 UPayment p = new UPayment();
@@ -34,8 +36,10 @@ namespace Fund.Api
                 p.Id = uPayment.Id;
 
                 p.MemberName = _context.UMembers.FirstOrDefault(x => x.Id == p.UMemberId).Name;
+
+                result.Add(p);
             }
-            return uPayments;
+            return result;
         }
 
         // GET: api/UPayments

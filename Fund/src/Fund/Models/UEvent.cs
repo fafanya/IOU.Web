@@ -22,5 +22,7 @@ namespace Fund.Models
 
         [NotMapped]
         public List<UTotal> UTotals { get; set; }
+        [NotMapped]
+        public string EventTypeName { get; set; }
     }
 }

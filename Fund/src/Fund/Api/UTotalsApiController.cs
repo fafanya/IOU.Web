@@ -21,8 +21,8 @@ namespace Fund.Api
             _context = context;
         }
         // GET: api/UTotalsApi
-        [HttpGet("{id}")]
-        public IEnumerable<UTotal> Get(int id)
+        [HttpGet("ByGroup/{id}")]
+        public IEnumerable<UTotal> ByGroup(int id)
         {
             UGroup uGroup = _context.UGroups
                 .Include(u => u.UEvents)
@@ -80,6 +80,58 @@ namespace Fund.Api
             }
 
             return RecountTotalDebtList(uGroup.UMembers);
+        }
+
+        [HttpGet("ByEvent/{id}")]
+        public IEnumerable<UTotal> ByEvent(int id)
+        {
+            UEvent e = _context.UEvents
+                .Include(u => u.UBills)
+                .Include(u => u.UPayments)
+                .SingleOrDefault(m => m.Id == id);
+
+            List<UMember> uMembers = _context.UMembers.Where(x => x.UGroupId == e.UGroupId).ToList();
+
+            if (e.UEventTypeId == UEventType.tOwn)
+            {
+                foreach (UBill b in _context.UBills.Include(x => x.UMember).Where(x => x.UEventId == e.Id))
+                {
+                    b.UMember.Balance += b.Amount;
+                }
+                foreach (UPayment p in _context.UPayments.Include(x => x.UMember).Where(x => x.UEventId == e.Id))
+                {
+                    p.UMember.Balance -= p.Amount;
+                }
+            }
+            else if (e.UEventTypeId == UEventType.tCommon)
+            {
+                foreach (UPayment p in _context.UPayments.Include(x => x.UMember).Where(x => x.UEventId == e.Id))
+                {
+                    p.UMember.Balance -= p.Amount;
+                }
+
+                double avg = _context.UPayments.Where(x => x.UEventId == e.Id).Sum(x => x.Amount) / uMembers.Count;
+                foreach (UMember m in uMembers)
+                {
+                    m.Balance += avg;
+                }
+            }
+            else if (e.UEventTypeId == UEventType.tPartly)
+            {
+                int count = _context.UBills.Where(x => x.UEventId == e.Id).GroupBy(x => x.UMemberId).Count();
+                double avg = _context.UPayments.Where(x => x.UEventId == e.Id).Sum(x => x.Amount) / count;
+                foreach (UBill b in _context.UBills.Include(x => x.UMember).Where(x => x.UEventId == e.Id))
+                {
+                    b.UMember.Balance += avg;
+                }
+
+                foreach (UPayment p in _context.UPayments.Include(x => x.UMember).Where(x => x.UEventId == e.Id))
+                {
+                    p.UMember.Balance -= p.Amount;
+                }
+            }
+
+            return RecountTotalDebtList(uMembers);
         }
 
         public static List<UTotal> RecountTotalDebtList(List<UMember> b)

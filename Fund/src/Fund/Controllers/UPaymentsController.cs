@@ -62,8 +62,7 @@ namespace Fund.Controllers
             {
                 _context.Add(uPayment);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction("Index");
-                return RedirectToAction("Details", "UEvents", new { id = uPayment.UEventId });
+                return RedirectToAction("DetailsPayments", "UEvents", new { id = uPayment.UEventId });
             }
             ViewData["UEventId"] = new SelectList(_context.UEvents, "Id", "Id", uPayment.UEventId);
             ViewData["UMemberId"] = new SelectList(_context.UMembers, "Id", "Id", uPayment.UMemberId);
@@ -118,7 +117,7 @@ namespace Fund.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("DetailsPayments", "UEvents", new { id = uPayment.UEventId });
             }
             ViewData["UEventId"] = new SelectList(_context.UEvents, "Id", "Id", uPayment.UEventId);
             ViewData["UMemberId"] = new SelectList(_context.UMembers, "Id", "Id", uPayment.UMemberId);
@@ -150,7 +149,7 @@ namespace Fund.Controllers
             var uPayment = await _context.UPayments.SingleOrDefaultAsync(m => m.Id == id);
             _context.UPayments.Remove(uPayment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("DetailsPayments", "UEvents", new { id = uPayment.UEventId });
         }
 
         private bool UPaymentExists(int id)

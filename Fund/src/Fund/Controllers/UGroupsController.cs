@@ -229,8 +229,32 @@ namespace Fund.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var uGroup = await _context.UGroups.SingleOrDefaultAsync(m => m.Id == id);
+
+            var debts = _context.UDebts.Where(x => x.UGroupId == uGroup.Id).ToList();
+            var events = _context.UEvents.Where(x => x.UGroupId == uGroup.Id).ToList();
+            var members = _context.UMembers.Where(x => x.UGroupId == uGroup.Id).ToList();
+
+            foreach (UEvent e in events)
+            {
+                var payments = _context.UPayments.Where(x => x.UEventId == e.Id).ToList();
+                _context.RemoveRange(payments);
+                var bills = _context.UBills.Where(x => x.UEventId == e.Id).ToList();
+                _context.RemoveRange(bills);
+            }
+            _context.RemoveRange(debts);
+            _context.RemoveRange(members);
+            _context.RemoveRange(events);
+
             _context.UGroups.Remove(uGroup);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                var error = ex;
+            }
+
             return RedirectToAction("Index");
         }
 

@@ -24,7 +24,22 @@ namespace Fund.Api
         [HttpGet("ByGroup/{id}")]
         public IEnumerable<UEvent> ByGroup([FromRoute] int id)
         {
-            return _context.UEvents.Where(x => x.UGroupId == id);
+            IEnumerable<UEvent> uEvents = _context.UEvents.Where(x => x.UGroupId == id);
+
+            List<UEvent> result = new List<UEvent>();
+            foreach (UEvent uEvent in uEvents)
+            {
+                UEvent e = new UEvent();
+                e.Name = uEvent.Name;
+                e.Id = uEvent.Id;
+                e.UGroupId = uEvent.UGroupId;
+                e.UEventTypeId = uEvent.UEventTypeId;
+
+                e.EventTypeName = _context.UEventTypes.FirstOrDefault(x => x.Id == e.UEventTypeId).Name;
+
+                result.Add(e);
+            }
+            return result;
         }
 
         // GET: api/UEvents
@@ -131,6 +146,11 @@ namespace Fund.Api
             {
                 return NotFound();
             }
+
+            var payments = _context.UPayments.Where(x => x.UEventId == uEvent.Id).ToList();
+            _context.RemoveRange(payments);
+            var bills = _context.UBills.Where(x => x.UEventId == uEvent.Id).ToList();
+            _context.RemoveRange(bills);
 
             _context.UEvents.Remove(uEvent);
             await _context.SaveChangesAsync();

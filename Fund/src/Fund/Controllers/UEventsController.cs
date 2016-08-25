@@ -42,7 +42,63 @@ namespace Fund.Controllers
 
             var uEvent = await _context.UEvents
                 .Include(u=>u.UBills)
-                .Include(u=>u.UPayments)
+                .SingleOrDefaultAsync(m => m.Id == id);
+
+            if (uEvent == null)
+            {
+                return NotFound();
+            }
+
+            if (uEvent.UBills != null)
+            {
+                foreach (UBill b in uEvent.UBills)
+                {
+                    b.UMember = _context.UMembers.FirstOrDefault(x => x.Id == b.UMemberId);
+                }
+            }
+
+            if (uEvent.UEventTypeId == UEventType.tCommon)
+            {
+                return RedirectToAction("DetailsPayments", new { id = uEvent.Id });
+            }
+
+            return View(uEvent);
+        }
+
+        public async Task<IActionResult> DetailsPayments(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var uEvent = await _context.UEvents
+                .Include(u => u.UPayments)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (uEvent == null)
+            {
+                return NotFound();
+            }
+
+            if (uEvent.UPayments != null)
+            {
+                foreach (UPayment p in uEvent.UPayments)
+                {
+                    p.UMember = _context.UMembers.FirstOrDefault(x => x.Id == p.UMemberId);
+                }
+            }
+
+            return View(uEvent);
+        }
+
+        public async Task<IActionResult> DetailsTotals(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var uEvent = await _context.UEvents
                 .SingleOrDefaultAsync(m => m.Id == id);
             uEvent.UTotals = GetUTotals(uEvent);
             if (uEvent == null)
@@ -153,6 +209,12 @@ namespace Fund.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var uEvent = await _context.UEvents.SingleOrDefaultAsync(m => m.Id == id);
+
+            var payments = _context.UPayments.Where(x => x.UEventId == uEvent.Id).ToList();
+            _context.RemoveRange(payments);
+            var bills = _context.UBills.Where(x => x.UEventId == uEvent.Id).ToList();
+            _context.RemoveRange(bills);
+
             _context.UEvents.Remove(uEvent);
             await _context.SaveChangesAsync();
             return RedirectToAction("DetailsEvents", "UGroups", new { id = uEvent.UGroupId });

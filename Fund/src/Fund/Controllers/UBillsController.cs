@@ -39,6 +39,8 @@ namespace Fund.Controllers
         }
         public IActionResult Create(int? uEventId)
         {
+            UEvent uEvent = _context.UEvents.FirstOrDefault(x => x.Id == uEventId);
+            ViewData["UEventTypeId"] = uEvent.UEventTypeId;
             ViewData["UEventId"] = uEventId;
             ViewData["UMemberId"] = new SelectList(_context.UMembers, "Id", "Name");
             return View();
@@ -55,7 +57,6 @@ namespace Fund.Controllers
             {
                 _context.Add(uBill);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction("Index");
                 return RedirectToAction("Details", "UEvents", new { id = uBill.UEventId });
             }
             ViewData["UEventId"] = new SelectList(_context.UEvents, "Id", "Name", uBill.UEventId);
@@ -76,6 +77,8 @@ namespace Fund.Controllers
             {
                 return NotFound();
             }
+            UEvent uEvent = _context.UEvents.FirstOrDefault(x => x.Id == uBill.UEventId);
+            ViewData["UEventTypeId"] = uEvent.UEventTypeId;
             ViewData["UEventId"] = new SelectList(_context.UEvents, "Id", "Id", uBill.UEventId);
             ViewData["UMemberId"] = new SelectList(_context.UMembers, "Id", "Id", uBill.UMemberId);
             return View(uBill);
@@ -111,7 +114,7 @@ namespace Fund.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "UEvents", new { id = uBill.UEventId });
             }
             ViewData["UEventId"] = new SelectList(_context.UEvents, "Id", "Id", uBill.UEventId);
             ViewData["UMemberId"] = new SelectList(_context.UMembers, "Id", "Id", uBill.UMemberId);
@@ -143,7 +146,7 @@ namespace Fund.Controllers
             var uBill = await _context.UBills.SingleOrDefaultAsync(m => m.Id == id);
             _context.UBills.Remove(uBill);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "UEvents", new { id = uBill.UEventId });
         }
 
         private bool UBillExists(int id)
