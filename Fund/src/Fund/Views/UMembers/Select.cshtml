@@ -1,0 +1,31 @@
+@model Fund.Models.UMemberViewModels.SelectViewModel
+
+@{
+    ViewData["Title"] = "Select";
+}
+
+<h2>Select Member</h2>
+
+<form asp-action="Select">
+    <div class="form-horizontal">
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="UUserId" />
+        <div class="form-group">
+            <label class="col-md-2 control-label">Member</label>
+            <div class="col-md-10">
+                <select asp-for="UMemberId" class ="form-control" asp-items="ViewBag.UMemberId"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="OK" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,64 @@
+@model Fund.Models.UGroup
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div>
+    <h4>Group</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            User
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UUser.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a> |
+    <a asp-controller="UMembers" asp-action="Select" asp-route-id="@Model.Id">Select Member</a>
+</div>
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li>
+            <a asp-action="Details" asp-route-id="@Model.Id">Members</a>
+        </li>
+        <li>
+            <a asp-action="DetailsEvents" asp-route-id="@Model.Id">Events</a>
+        </li>
+        <li>
+            <a asp-action="DetailsDebts" asp-route-id="@Model.Id">Debts</a>
+        </li>
+        <li class="active">
+            <a asp-action="DetailsTotals" asp-route-id="@Model.Id">Totals</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="totals" class="tab-pane fade in active">
+            <div>
+                @Html.Partial("/Views/UTotals/Index.cshtml", Model.UTotals)
+            </div>
+        </div>
+    </div>
+</div>

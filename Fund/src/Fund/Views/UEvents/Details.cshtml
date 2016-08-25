@@ -1,0 +1,61 @@
+@model Fund.Models.UEvent
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>UEvent</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="DetailsEvents" asp-controller="UGroups">Back to List</a>
+</div>
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a data-toggle="tab" href="#bills">Bills</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#payments">Payments</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#totals">Totals</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="bills" class="tab-pane fade in active">
+            <h3>Bills</h3>
+            <a asp-controller="UBills" asp-action="Create" asp-route-uEventId="@Model.Id">Create</a>
+            <div>
+                @Html.Partial("/Views/UBills/Index.cshtml", Model.UBills)
+            </div>
+        </div>
+        <div id="payments" class="tab-pane fade">
+            <h3>Payments</h3>
+            <a asp-controller="UPayments" asp-action="Create" asp-route-uEventId="@Model.Id">Create</a>
+            <div>
+                @Html.Partial("/Views/UPayments/Index.cshtml", Model.UPayments)
+            </div>
+        </div>
+        <div id="totals" class="tab-pane fade">
+            <h3>Totals</h3>
+            <div>
+                @Html.Partial("/Views/UTotals/Index.cshtml", Model.UTotals)
+            </div>
+        </div>
+    </div>
+</div>
