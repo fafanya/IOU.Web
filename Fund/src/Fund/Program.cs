@@ -14,6 +14,7 @@ namespace Fund
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://46.101.214.70")
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
