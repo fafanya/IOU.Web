@@ -162,7 +162,7 @@ namespace Fund.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Select([Bind("UMemberId")] SelectViewModel select)
+        public IActionResult Select([Bind("UMemberId, UUserId")] SelectViewModel select)
         {
             UMember currentMember = _context.UMembers.SingleOrDefault(x => x.Id == select.UMemberId);
             if (currentMember != null)
@@ -170,7 +170,8 @@ namespace Fund.Controllers
                 currentMember.UUserId = select.UUserId;
                 _context.Update(currentMember);
 
-                UMember previousMember = _context.UMembers.SingleOrDefault(x => x.UUserId == select.UUserId);
+                UMember previousMember = _context.UMembers.SingleOrDefault(x => x.UUserId == select.UUserId
+                && x.UGroupId == currentMember.UGroupId);
                 if (previousMember != null)
                 {
                     previousMember.UUserId = null;
