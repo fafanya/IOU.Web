@@ -101,6 +101,8 @@ namespace Fund
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DataSeeder.Initialize(app.ApplicationServices);
         }
     }
 }
