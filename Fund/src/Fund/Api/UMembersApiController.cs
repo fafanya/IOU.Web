@@ -31,7 +31,8 @@ namespace Fund.Api
                 currentMember.UUserId = select.UUserId;
                 _context.Update(currentMember);
 
-                UMember previousMember = _context.UMembers.SingleOrDefault(x => x.UUserId == select.UUserId);
+                UMember previousMember = _context.UMembers.SingleOrDefault(x => x.UUserId == select.UUserId
+                && x.UGroupId == currentMember.UGroupId);
                 if (previousMember != null)
                 {
                     previousMember.UUserId = null;

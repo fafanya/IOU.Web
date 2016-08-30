@@ -176,7 +176,7 @@ namespace Fund.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Password")] UGroup uGroup)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Password, UUserId")] UGroup uGroup)
         {
             if (id != uGroup.Id)
             {
