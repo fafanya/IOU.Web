@@ -102,7 +102,7 @@ namespace Fund
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DataSeeder.Initialize(app.ApplicationServices);
+            ApplicationDbContext.Initialize(app.ApplicationServices);
         }
     }
 }

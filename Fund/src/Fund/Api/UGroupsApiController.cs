@@ -8,10 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Fund.Data;
 using Fund.Models;
 using Fund.Models.UGroupViewModels;
-
-using System.Net;
-using System.IO;
-using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
 
 namespace Fund.Api
