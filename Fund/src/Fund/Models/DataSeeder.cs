@@ -21,19 +21,19 @@ namespace Fund.Models
                                  new UEventType
                                  {
                                      Id = 1,
-                                     Name = "Own"
+                                     Name = "Личный"
                                  },
 
                                  new UEventType
                                  {
                                      Id = 2,
-                                     Name = "Common"
+                                     Name = "Общий"
                                  },
 
                                  new UEventType
                                  {
                                      Id = 3,
-                                     Name = "Partly"
+                                     Name = "Полуобщий"
                                  }
                             );
                             context.SaveChanges();
