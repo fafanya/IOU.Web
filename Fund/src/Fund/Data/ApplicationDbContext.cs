@@ -11,13 +11,13 @@ namespace Fund.Data
     {
         public DbSet<UDebt> UDebts { get; set; }
         public DbSet<UBill> UBills { get; set; }
-        public DbSet<UPayment> UPayments { get; set; }
-        public DbSet<UEvent> UEvents { get; set; }
-        public DbSet<UEventType> UEventTypes { get; set; }
-        public DbSet<UGroup> UGroups { get; set; }
-        public DbSet<UMember> UMembers { get; set; }
         public DbSet<UUser> UUsers { get; set; }
-
+        public DbSet<UGroup> UGroups { get; set; }
+        public DbSet<UEvent> UEvents { get; set; }
+        public DbSet<UMember> UMembers { get; set; }
+        public DbSet<UPayment> UPayments { get; set; }
+        public DbSet<UEventType> UEventTypes { get; set; }
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
